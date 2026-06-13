@@ -1,0 +1,54 @@
+body {
+  margin:0;
+  font-family:Arial;
+  background:white;
+  color:#0f172a;
+}
+
+nav {
+  display:flex;
+  justify-content:space-between;
+  padding:20px 50px;
+  border-bottom:1px solid #e5e7eb;
+}
+
+nav h1 {
+  color:#4da3ff;
+}
+
+.hero {
+  height:80vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
+
+.section {
+  padding:80px 15%;
+}
+
+.card {
+  border:1px solid #e5e7eb;
+  padding:15px;
+  border-radius:12px;
+  margin-top:10px;
+}
+
+input, textarea {
+  width:100%;
+  margin-top:10px;
+  padding:10px;
+  border-radius:10px;
+  border:1px solid #e5e7eb;
+}
+
+button {
+  margin-top:10px;
+  padding:10px 15px;
+  background:#4da3ff;
+  border:none;
+  color:white;
+  border-radius:10px;
+  cursor:pointer;
+}
