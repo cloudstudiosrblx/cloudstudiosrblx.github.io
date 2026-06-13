@@ -98,4 +98,6 @@ onAuthStateChanged(auth,(user)=>{
     if(panel) panel.style.display = "none";
     if(loginBox) loginBox.style.display = "block";
   }
+  import { deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+  }
 });
