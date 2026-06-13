@@ -1,54 +1,87 @@
 body {
   margin:0;
-  font-family:Arial;
-  background:white;
+  font-family:Inter, Arial;
+  background:#f4f8ff;
   color:#0f172a;
 }
 
+/* NAV */
 nav {
   display:flex;
   justify-content:space-between;
-  padding:20px 50px;
-  border-bottom:1px solid #e5e7eb;
+  padding:20px 60px;
+  background:white;
+  border-bottom:1px solid #e6eefc;
+  position:fixed;
+  width:100%;
 }
 
 nav h1 {
   color:#4da3ff;
 }
 
+/* HERO */
 .hero {
-  height:80vh;
+  height:85vh;
   display:flex;
   flex-direction:column;
   justify-content:center;
   align-items:center;
+  text-align:center;
 }
 
+.hero h2 {
+  font-size:65px;
+  color:#4da3ff;
+}
+
+/* SECTION */
 .section {
   padding:80px 15%;
 }
 
+/* CARD */
 .card {
-  border:1px solid #e5e7eb;
-  padding:15px;
+  background:white;
+  padding:18px;
+  border-radius:14px;
+  margin-top:15px;
+  border:1px solid #e6eefc;
+  box-shadow:0 10px 25px rgba(0,0,0,0.05);
+}
+
+/* IMAGE */
+img {
+  width:100%;
   border-radius:12px;
   margin-top:10px;
 }
 
-input, textarea {
-  width:100%;
-  margin-top:10px;
-  padding:10px;
-  border-radius:10px;
-  border:1px solid #e5e7eb;
-}
-
+/* BUTTON */
 button {
-  margin-top:10px;
   padding:10px 15px;
-  background:#4da3ff;
   border:none;
+  background:#4da3ff;
   color:white;
   border-radius:10px;
   cursor:pointer;
+  margin-top:10px;
+}
+
+button:hover {
+  background:#2f8fff;
+}
+
+/* DELETE */
+.deleteBtn {
+  background:#ff4d4d;
+}
+
+.deleteBtn:hover {
+  background:#ff2d2d;
+}
+
+/* ADMIN */
+.adminBox {
+  padding:100px;
 }
