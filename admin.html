@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
-<title>Admin</title>
+<title>Cloud Studios</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="style.css">
 <script type="module" src="firebase.js"></script>
@@ -10,32 +11,25 @@
 
 <body>
 
-<div class="adminBox">
+<nav>
+  <h1>☁ Cloud Studios</h1>
+  <a href="admin.html">Admin</a>
+</nav>
 
-<div id="loginBox">
-  <h2>Admin Login</h2>
-  <input id="email" placeholder="Email">
-  <input id="pass" type="password" placeholder="Password">
-  <button onclick="login()">Login</button>
-</div>
+<header class="hero">
+  <h2>Cloud Studios</h2>
+  <p>We build high-quality Roblox experiences</p>
+</header>
 
-<div id="panel" style="display:none">
+<section class="section">
+  <h3>Projects</h3>
+  <div id="projects"></div>
+</section>
 
-  <h2>Create Post</h2>
-
-  <input id="title" placeholder="Title">
-  <textarea id="text" placeholder="Text"></textarea>
-  <input type="file" id="image">
-
-  <button onclick="post()">Post</button>
-  <button onclick="logout()">Logout</button>
-
-  <h3>Posts</h3>
-  <div id="adminPosts"></div>
-
-</div>
-
-</div>
+<section class="section">
+  <h3>Dev Blog</h3>
+  <div id="posts"></div>
+</section>
 
 </body>
 </html>
