@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Admin - Cloud Studios</title>
+
+<link rel="stylesheet" href="style.css">
+<script type="module" src="firebase.js"></script>
+</head>
+
+<body>
+
+<div class="admin">
+
+<h2>Admin Login</h2>
+
+<div id="loginBox">
+  <input id="email" placeholder="Email">
+  <input id="pass" type="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<div id="panel" style="display:none">
+
+  <h2>Create Post</h2>
+
+  <input id="title" placeholder="Title">
+  <textarea id="text" placeholder="Text"></textarea>
+  <input type="file" id="image">
+
+  <button onclick="post()">Post</button>
+  <button onclick="logout()">Logout</button>
+
+</div>
+
+</div>
+
+</body>
+</html>
