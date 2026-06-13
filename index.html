@@ -2,218 +2,29 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cloud Studios</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: #050816;
-    color: white;
-}
-
-/* NAV */
-nav {
-    display: flex;
-    justify-content: space-between;
-    padding: 20px 50px;
-    background: rgba(0,0,0,0.3);
-    position: fixed;
-    width: 100%;
-    top: 0;
-    backdrop-filter: blur(10px);
-}
-
-nav h1 {
-    color: #4da3ff;
-    font-size: 18px;
-}
-
-nav a {
-    color: white;
-    margin-left: 20px;
-    text-decoration: none;
-    opacity: 0.8;
-}
-
-nav a:hover {
-    opacity: 1;
-}
-
-/* HERO */
-.hero {
-    height: 90vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 0 20px;
-    background: radial-gradient(circle at top, #1a2b6d, #050816);
-}
-
-.hero h2 {
-    font-size: 52px;
-    margin: 0;
-}
-
-.hero p {
-    opacity: 0.7;
-    max-width: 600px;
-}
-
-.btn {
-    margin-top: 20px;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    background: #4da3ff;
-    color: black;
-    font-weight: bold;
-}
-
-/* SECTION */
-.section {
-    padding: 80px 15%;
-}
-
-.section h3 {
-    font-size: 28px;
-    margin-bottom: 20px;
-}
-
-/* PROJECTS */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
-}
-
-.card {
-    background: rgba(255,255,255,0.05);
-    padding: 20px;
-    border-radius: 15px;
-    border: 1px solid rgba(255,255,255,0.08);
-}
-
-/* BLOG */
-.post {
-    background: rgba(255,255,255,0.05);
-    padding: 20px;
-    border-radius: 12px;
-    margin-bottom: 15px;
-}
-
-/* APPLY */
-input, textarea {
-    width: 100%;
-    margin: 5px 0;
-    padding: 10px;
-    border-radius: 8px;
-    border: none;
-    background: #0b1228;
-    color: white;
-}
-
-footer {
-    text-align: center;
-    padding: 30px;
-    opacity: 0.5;
-}
-</style>
+<link rel="stylesheet" href="style.css">
+<script type="module" src="firebase.js"></script>
 </head>
 
 <body>
 
 <nav>
-    <h1>☁ Cloud Studios</h1>
-    <div>
-        <a href="#projects">Projects</a>
-        <a href="#blog">Blog</a>
-        <a href="#apply">Apply</a>
-    </div>
+  <h1>☁ Cloud Studios</h1>
+  <a href="admin.html">Admin</a>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-    <h2>Cloud Studios</h2>
-    <p>We build high-quality Roblox & simulator games with addictive gameplay, clean design and long-term updates.</p>
-    <button class="btn" onclick="window.open('https://discord.com')">Join Discord</button>
+<header class="hero">
+  <h2>Cloud Studios</h2>
+  <p>Building high-quality Roblox experiences</p>
+</header>
+
+<section class="section">
+  <h3>Dev Blog</h3>
+  <div id="posts"></div>
 </section>
-
-<!-- PROJECTS -->
-<section class="section" id="projects">
-    <h3>Projects</h3>
-    <div class="grid">
-        <div class="card">
-            <h4>Project Alpha</h4>
-            <p>In Development</p>
-        </div>
-        <div class="card">
-            <h4>Simulator X</h4>
-            <p>Planning Phase</p>
-        </div>
-        <div class="card">
-            <h4>Secret Game</h4>
-            <p>Coming Soon</p>
-        </div>
-    </div>
-</section>
-
-<!-- BLOG -->
-<section class="section" id="blog">
-    <h3>Dev Updates</h3>
-
-    <div id="posts"></div>
-
-    <input id="title" placeholder="Update title">
-    <textarea id="content" placeholder="Write update..."></textarea>
-    <button class="btn" onclick="addPost()">Post update</button>
-</section>
-
-<!-- APPLY -->
-<section class="section" id="apply">
-    <h3>Join Cloud Studios</h3>
-
-    <input placeholder="Name">
-    <input placeholder="Role (Scripter / Builder / UI / Tester)">
-    <input placeholder="Discord username">
-    <textarea placeholder="Why do you want to join?"></textarea>
-    <button class="btn">Send Application</button>
-</section>
-
-<footer>
-    © 2026 Cloud Studios
-</footer>
-
-<script>
-let posts = [];
-
-function addPost() {
-    let t = document.getElementById("title").value;
-    let c = document.getElementById("content").value;
-
-    if(!t || !c) return;
-
-    posts.push({t, c});
-    render();
-}
-
-function render() {
-    let html = "";
-    posts.slice().reverse().forEach(p => {
-        html += `
-        <div class="post">
-            <h4>${p.t}</h4>
-            <p>${p.c}</p>
-        </div>`;
-    });
-
-    document.getElementById("posts").innerHTML = html;
-}
-</script>
 
 </body>
 </html>
