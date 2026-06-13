@@ -1,7 +1,7 @@
 body {
   margin:0;
   font-family:Inter, Arial;
-  background:#f4f8ff;
+  background:#f5f9ff;
   color:#0f172a;
 }
 
@@ -31,7 +31,7 @@ nav h1 {
 }
 
 .hero h2 {
-  font-size:65px;
+  font-size:70px;
   color:#4da3ff;
 }
 
@@ -46,8 +46,8 @@ nav h1 {
   padding:18px;
   border-radius:14px;
   margin-top:15px;
-  border:1px solid #e6eefc;
   box-shadow:0 10px 25px rgba(0,0,0,0.05);
+  border:1px solid #e6eefc;
 }
 
 /* IMAGE */
@@ -75,13 +75,4 @@ button:hover {
 /* DELETE */
 .deleteBtn {
   background:#ff4d4d;
-}
-
-.deleteBtn:hover {
-  background:#ff2d2d;
-}
-
-/* ADMIN */
-.adminBox {
-  padding:100px;
 }
