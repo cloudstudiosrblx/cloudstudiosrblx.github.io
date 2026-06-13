@@ -1,11 +1,33 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
-import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js";
 
-/* 🔥 YOUR FIREBASE CONFIG */
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  query,
+  orderBy,
+  onSnapshot,
+  deleteDoc,
+  doc
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-auth.js";
+
+import {
+  getStorage,
+  ref,
+  uploadBytes,
+  getDownloadURL
+} from "https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js";
+
+/* 🔥 FIREBASE CONFIG */
 const firebaseConfig = {
-  apiKey: "AIzaSyD7YZOnBGK3qCyYd0plmrot_3YiLaxz9Lw",
+  apiKey: "YOUR_API_KEY",
   authDomain: "cloudstudios-8eccb.firebaseapp.com",
   projectId: "cloudstudios-8eccb",
   storageBucket: "cloudstudios-8eccb.firebasestorage.app",
@@ -14,90 +36,124 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+
 const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 
-/* =========================
-   LOGIN SYSTEM
-========================= */
+/* ======================
+   LOGIN
+====================== */
 
 window.login = async function(){
-  let email = document.getElementById("email").value;
-  let pass = document.getElementById("pass").value;
-
-  await signInWithEmailAndPassword(auth, email, pass);
+  await signInWithEmailAndPassword(
+    auth,
+    email.value,
+    pass.value
+  );
 };
 
 window.logout = function(){
   signOut(auth);
 };
 
-/* =========================
-   BLOG POST
-========================= */
+/* ======================
+   POST BLOG
+====================== */
 
 window.post = async function(){
 
   let file = document.getElementById("image").files[0];
-  let imageUrl = "";
+  let imageURL = "";
 
   if(file){
     const storageRef = ref(storage, "posts/" + file.name);
     await uploadBytes(storageRef, file);
-    imageUrl = await getDownloadURL(storageRef);
+    imageURL = await getDownloadURL(storageRef);
   }
 
   await addDoc(collection(db,"posts"),{
     title: title.value,
     text: text.value,
-    image: imageUrl,
+    image: imageURL,
     time: Date.now()
   });
 
   alert("Posted!");
 };
 
-/* =========================
+/* ======================
+   DELETE POST
+====================== */
+
+window.deletePost = async function(id){
+  await deleteDoc(doc(db,"posts",id));
+};
+
+/* ======================
    LOAD POSTS (PUBLIC)
-========================= */
+====================== */
 
 const q = query(collection(db,"posts"), orderBy("time","desc"));
 
 onSnapshot(q,(snap)=>{
   let html = "";
 
-  snap.forEach(doc=>{
-    let p = doc.data();
+  snap.forEach(d=>{
+    let p = d.data();
 
     html += `
       <div class="card">
         <h3>${p.title}</h3>
         <p>${p.text}</p>
-        ${p.image ? `<img src="${p.image}" style="width:100%;border-radius:10px;">` : ""}
+        ${p.image ? `<img src="${p.image}">` : ""}
       </div>
     `;
   });
 
-  const posts = document.getElementById("posts");
+  let posts = document.getElementById("posts");
   if(posts) posts.innerHTML = html;
 });
 
-/* =========================
-   SHOW ADMIN PANEL
-========================= */
+/* ======================
+   LOAD POSTS (ADMIN)
+====================== */
+
+onSnapshot(q,(snap)=>{
+  let html = "";
+
+  snap.forEach(d=>{
+    let p = d.data();
+
+    html += `
+      <div class="card">
+        <b>${p.title}</b>
+        <p>${p.text}</p>
+        <button class="deleteBtn" onclick="deletePost('${d.id}')">Delete</button>
+      </div>
+    `;
+  });
+
+  let adminPosts = document.getElementById("adminPosts");
+  if(adminPosts) adminPosts.innerHTML = html;
+});
+
+/* ======================
+   AUTH UI CONTROL
+====================== */
 
 onAuthStateChanged(auth,(user)=>{
-  const panel = document.getElementById("panel");
-  const loginBox = document.getElementById("loginBox");
-
   if(user){
-    if(panel) panel.style.display = "block";
-    if(loginBox) loginBox.style.display = "none";
+    if(document.getElementById("panel"))
+      document.getElementById("panel").style.display="block";
+
+    if(document.getElementById("loginBox"))
+      document.getElementById("loginBox").style.display="none";
   } else {
-    if(panel) panel.style.display = "none";
-    if(loginBox) loginBox.style.display = "block";
-  }
-  import { deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+    if(document.getElementById("panel"))
+      document.getElementById("panel").style.display="none";
+
+    if(document.getElementById("loginBox"))
+      document.getElementById("loginBox").style.display="block";
   }
 });
