@@ -8,7 +8,8 @@ import {
   orderBy,
   onSnapshot,
   deleteDoc,
-  doc
+  doc,
+  updateDoc
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
 import {
@@ -25,7 +26,7 @@ import {
   getDownloadURL
 } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-storage.js";
 
-/* 🔥 FIREBASE CONFIG */
+/* CONFIG */
 const firebaseConfig = {
   apiKey: "YOUR_API_KEY",
   authDomain: "cloudstudios-8eccb.firebaseapp.com",
@@ -41,119 +42,126 @@ const db = getFirestore(app);
 const auth = getAuth(app);
 const storage = getStorage(app);
 
-/* ======================
-   LOGIN
-====================== */
+let editMode = null;
 
-window.login = async function(){
-  await signInWithEmailAndPassword(
-    auth,
-    email.value,
-    pass.value
-  );
+/* LOGIN */
+window.login = async () => {
+  await signInWithEmailAndPassword(auth, email.value, pass.value);
 };
 
-window.logout = function(){
-  signOut(auth);
-};
+window.logout = () => signOut(auth);
 
-/* ======================
-   POST BLOG
-====================== */
+/* BLOG POST */
+window.post = async () => {
 
-window.post = async function(){
-
-  let file = document.getElementById("image").files[0];
+  let file = image.files[0];
   let imageURL = "";
 
-  if(file){
-    const storageRef = ref(storage, "posts/" + file.name);
-    await uploadBytes(storageRef, file);
-    imageURL = await getDownloadURL(storageRef);
+  if (file) {
+    const r = ref(storage, "posts/" + file.name);
+    await uploadBytes(r, file);
+    imageURL = await getDownloadURL(r);
   }
 
-  await addDoc(collection(db,"posts"),{
-    title: title.value,
-    text: text.value,
-    image: imageURL,
-    time: Date.now()
-  });
+  if (editMode) {
+    await updateDoc(doc(db,"posts",editMode),{
+      title: title.value,
+      text: text.value,
+      image: imageURL
+    });
+    editMode = null;
+  } else {
+    await addDoc(collection(db,"posts"),{
+      title: title.value,
+      text: text.value,
+      image: imageURL,
+      time: Date.now()
+    });
+  }
 
-  alert("Posted!");
+  alert("Saved!");
 };
 
-/* ======================
-   DELETE POST
-====================== */
-
-window.deletePost = async function(id){
+/* DELETE POST */
+window.deletePost = async (id) => {
   await deleteDoc(doc(db,"posts",id));
 };
 
-/* ======================
-   LOAD POSTS (PUBLIC)
-====================== */
+/* EDIT POST */
+window.editPost = (id, t, txt) => {
+  title.value = t;
+  text.value = txt;
+  editMode = id;
+};
 
+/* ADD PROJECT */
+window.addProject = async () => {
+  await addDoc(collection(db,"projects"),{
+    name: pname.value,
+    desc: pdesc.value,
+    time: Date.now()
+  });
+};
+
+/* LOAD POSTS */
 const q = query(collection(db,"posts"), orderBy("time","desc"));
 
 onSnapshot(q,(snap)=>{
-  let html = "";
+  let html="";
 
   snap.forEach(d=>{
-    let p = d.data();
+    let p=d.data();
 
     html += `
       <div class="card">
         <h3>${p.title}</h3>
         <p>${p.text}</p>
         ${p.image ? `<img src="${p.image}">` : ""}
+
+        <button onclick="deletePost('${d.id}')">Delete</button>
+        <button onclick="editPost('${d.id}','${p.title}','${p.text}')">Edit</button>
       </div>
     `;
   });
 
-  let posts = document.getElementById("posts");
-  if(posts) posts.innerHTML = html;
+  if(document.getElementById("adminPosts"))
+    adminPosts.innerHTML = html;
+
+  if(document.getElementById("posts"))
+    posts.innerHTML = html;
 });
 
-/* ======================
-   LOAD POSTS (ADMIN)
-====================== */
+/* LOAD PROJECTS */
+const qp = query(collection(db,"projects"), orderBy("time","desc"));
 
-onSnapshot(q,(snap)=>{
-  let html = "";
+onSnapshot(qp,(snap)=>{
+  let html="";
 
   snap.forEach(d=>{
-    let p = d.data();
+    let p=d.data();
 
     html += `
       <div class="card">
-        <b>${p.title}</b>
-        <p>${p.text}</p>
-        <button class="deleteBtn" onclick="deletePost('${d.id}')">Delete</button>
+        <h3>${p.name}</h3>
+        <p>${p.desc}</p>
       </div>
     `;
   });
 
-  let adminPosts = document.getElementById("adminPosts");
-  if(adminPosts) adminPosts.innerHTML = html;
+  if(document.getElementById("projects"))
+    projects.innerHTML = html;
+
+  if(document.getElementById("adminProjects"))
+    adminProjects.innerHTML = html;
 });
 
-/* ======================
-   AUTH UI CONTROL
-====================== */
-
+/* AUTH UI */
 onAuthStateChanged(auth,(user)=>{
   if(user){
-    if(document.getElementById("panel"))
-      document.getElementById("panel").style.display="block";
-
-    if(document.getElementById("loginBox"))
-      document.getElementById("loginBox").style.display="none";
+    panel.style.display="block";
+    loginBox.style.display="none";
   } else {
-    if(document.getElementById("panel"))
-      document.getElementById("panel").style.display="none";
-
-    if(document.getElementById("loginBox"))
-      document.getElementById("loginBox").style.display="block";
+    panel.style.display="none";
+    loginBox.style.display="block";
   }
 });
